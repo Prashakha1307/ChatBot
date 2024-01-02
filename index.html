@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Chatbot</title>
+  <style>
+      body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #chat-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 320px;
+      border: 1px solid #efb7b7;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: #ffdfdf;
+      transition: transform 0.3s ease-in-out;
+      transform: translateX(100%);
+    }
+
+    #chat-box {
+      height: 200px;
+      overflow-y: scroll;
+      padding: 15px;
+    }
+
+    #input-box {
+      display: flex;
+      padding: 10px;
+      background-color: #b4b4b4;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    #send-btn {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #ffffff;
+      color: #fff;
+    }
+
+    #chat-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #ffa265;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      padding: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+    }
+  </style>
+  <iframe src="https://www.sciastra.com/" style="width: 100%; height: 500px; border: none;"></iframe>
+</head>
+<body>
+
+<div id="chat-container">
+  <div id="chat-box"></div>
+  <div id="input-box">
+    <input type="text" id="user-input" placeholder="Type your message..." onkeydown="handleKeyPress(event)">
+    <button id="send-btn" onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<button id="chat-btn" onclick="toggleChat()">Chat</button>
+
+<script>
+  const chatContainer = document.getElementById('chat-container');
+  const chatBtn = document.getElementById('chat-btn');
+  const chatBox = document.getElementById('chat-box');
+  const userInput = document.getElementById('user-input');
+
+  let chatOpen = false;
+
+  // Define your custom questions and answers here
+  const qaPairs = [
+  { question: 'What is SciAstra?', answer: 'Started in March 2021 from a hostel room and a small YouTube channel, SciAstra has grown to include over 60 mentors from premier research institutes of the world and India like Harvard, Oxford, Max Planck, IISc, IISERs, etc. We believe education should go beyond cracking competitive exams. Our focus is to foster critical thinking in students, moving beyond rote memorization for exam qualifications. We aspire to guide students to think like scientists!' },
+    { question: 'What are its Services?', answer: 'services include comprehensive guidance for prestigious institutes such as IISERs, NISER, IISc Bangalore, ISI, CMI, and others. We also assist students in preparing for research entrance exams like IAT, NEST, ISI, CMI, IACS, and more.' },
+    { question: 'What are results of SciAstra?', answer: '1. Over 600+ selections in IISERs 2. Over 100+ selections in NISER and CEBS 3. AIR 1 in IAT, AIR 12 in NEST, AIR 13 in KVPY 4.' },
+    { question: 'What are some key features?', answer: '1.Faculties 2.Results 3.Materials 4.Mentors' },
+    { question: 'Hi', answer: 'Hello ! how can i help you ?' },
+    { question: 'Is there any resources available on the website?', answer: 'yes , it includes blogs , Material , Web stories etc' },
+    { question: 'Can we book a session directly ?', answer: 'yes,you can book a session by providing date and time .' },
+    { question: 'Is there any Official app of SciAstra?', answer: 'Yes , there is , you can Download SciAstra app to reach us out there too. You can boost up your preparation for NEST,IAT, IACS-UPST' },
+    { question: 'Is the App available on all platforms?', answer: 'Yes , it is available on play store and App store' },
+    { question: 'How can i contact SciAstra?', answer: 'You can email at support@sciastra.com' },
+
+  ];
+
+  function displayMessage(sender, message) {
+    const div = document.createElement('div');
+    div.innerHTML = `<strong>${sender}:</strong> ${message}`;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
+  }
+
+  function sendMessage() {
+    const userMessage = userInput.value.trim();
+
+    if (userMessage !== '') {
+      displayMessage('You', userMessage);
+      userInput.value = ''; // Clear the input field
+
+      // Check if there is a predefined answer for the user's message
+      const matchedPair = qaPairs.find(pair =>
+        userMessage.toLowerCase().includes(pair.question.toLowerCase())
+      );
+
+      if (matchedPair) {
+        setTimeout(() => {
+          displayMessage('Chatbot', matchedPair.answer);
+        }, 500); // Simulate a slight delay before chatbot responds
+      } else {
+        // If no predefined answer, you can handle it as you wish
+        setTimeout(() => {
+          displayMessage('Chatbot', 'I do not understand that question.');
+        }, 500);
+      }
+    }
+  }
+
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    if (chatOpen) {
+      chatContainer.style.transform = 'translateX(0)';
+    } else {
+      chatContainer.style.transform = 'translateX(100%)';
+    }
+  }
+
+  function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  }
+</script>
+
+</body>
+</html>
